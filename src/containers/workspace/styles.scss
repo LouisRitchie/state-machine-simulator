@@ -1,0 +1,17 @@
+.workspaceWrapper {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+
+  .drawArea {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    .ghostSelection {
+      position: absolute;
+      background: rgba(102, 153, 255, 0.5);
+      border-radius: 50%;
+    }
+  }
+}

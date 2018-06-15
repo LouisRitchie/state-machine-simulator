@@ -1,26 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { last, mapObjIndexed, pick } from 'ramda'
+import { last, head, mapObjIndexed, pick } from 'ramda'
 import { interval } from 'rxjs/observable/interval'
 import { map, take, takeUntil, throttleTime, withLatestFrom } from 'rxjs/operators'
 import { Subject } from 'rxjs/Subject'
-import { addEntity } from 'actions/entities'
+import { addEntity, connectTwoEntities } from 'actions/entities'
 import BackgroundGrid from 'components/backgroundGrid'
-import RectangularArea from 'components/rectangularArea'
+import CircularArea from 'components/circularArea'
 import ControlPanel from 'components/controlPanel'
 import { getTLHW, snapToGridFactory } from './helpers'
 import './styles.scss'
+import CircleDrawArea from 'components/circleDrawArea'
+import ConnectDrawArea from 'components/connectDrawArea'
 
 const initialState = {
   startCoords: [-1, -1],
-  currentCoords: [-1, -1],
-  startCoordsGhost: [-1, -1],
-  currentCoordsGhost: [-1, -1]
+  currentCoords: [-1, -1]
 }
 
 const mapStateToProps = state => {
-  const { entities, settings: { gridSize } } = state
-  return { entities, gridSize }
+  const { entities: { entities, adjacency }, settings: { gridSize }, selection } = state
+  return { entities, gridSize, selection }
 }
 
 class Workspace extends Component {
@@ -44,14 +44,10 @@ class Workspace extends Component {
     this._updateCurrentCoords$ = interval(60).pipe(withLatestFrom(this._mouseMove$), map(last))
     this._updateCurrentCoords$.subscribe(({pageX, pageY}) => this.state.startCoords[0] !== -1 && this.setState({ currentCoords: [pageX, pageY] }))
 
-    // update the ghost square every 250ms
-    this._updateCurrentCoordsGhost$ = this._updateCurrentCoords$.pipe(throttleTime(250))
-    this._updateCurrentCoordsGhost$.subscribe(({pageX, pageY}) => this.state.startCoords[0] !== -1 && this.setState({ currentCoordsGhost: [pageX, pageY] }))
-
-    this._shapeDrawn$ = this._mouseUp$.pipe(withLatestFrom(this._mouseDown$))
+    this._shapeDrawn$ = this._mouseUp$.pipe(withLatestFrom(this._updateCurrentCoords$))
     this._shapeDrawn$.subscribe(
       ([{pageX: x1, pageY: y1}, {pageX: x2, pageY: y2}]) => {
-        const { left: x, top: y, height, width } = this._snapToGrid([x1, y1], [x2, y2])
+        const { left: x, top: y, height, width } = this._snapToGrid([x2, y2])
 
         if (height !== 0 || width !== 0) {
           this.props.addEntity({x, y, height, width})
@@ -72,25 +68,23 @@ class Workspace extends Component {
   _mouseUp = event => this._mouseUp$.next(event)
   _mouseMove = event => this._mouseMove$.next(event)
 
+
   render() {
     const {
-      props: { entities, gridSize },
-      state: { startCoords, currentCoords, startCoordsGhost, currentCoordsGhost }
+      props: { entities, gridSize, selection },
+      state: { currentCoords }
     } = this
+
+    console.log(selection)
 
     return (
       <div className='workspaceWrapper'>
         <BackgroundGrid />
         <ControlPanel />
-
-        <div className='drawArea' onMouseDown={this._mouseDown} onMouseUp={this._mouseUp} onMouseMove={this._mouseMove}>
-          { entities.map(({x, y, height, width, id}) => <RectangularArea x={x} y={y} height={height} width={width} key={id} id={id} />) }
-          { startCoords[0] !== -1 && <div className='currentSelection' style={getTLHW(startCoords, currentCoords)} /> }
-          { startCoordsGhost[0] !== -1 && <div className='ghostSelection' style={mapObjIndexed(val => val * gridSize, this._snapToGrid(startCoordsGhost, currentCoordsGhost))} /> }
-        </div>
+        { selection.length > 0 ? <ConnectDrawArea /> : <CircleDrawArea /> }
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps, {addEntity})(Workspace)
+export default connect(mapStateToProps, {addEntity, connectTwoEntities})(Workspace)

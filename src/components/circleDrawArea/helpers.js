@@ -1,9 +1,11 @@
+const SIZE_OF_CIRCLE = 3
+
 // take x and y position of user-drawn rectangle, and pass them to a function curried with grid size, that returns x and y coordinates
 export const snapToGridFactory = gridSize => ([x, y]) => ({
   top: Math.round(y / gridSize),
   left: Math.round(x / gridSize),
-  height: 3,
-  width: 3
+  height: SIZE_OF_CIRCLE,
+  width: SIZE_OF_CIRCLE
 })
 
 export const getTLHW = (startCoords, currentCoords) => {

@@ -1,3 +1,5 @@
+import { ENTITY_DELETE, ENTITY_DELETE_ALL } from 'actions/entities'
+
 const selection = (state = [], {type, payload}) => {
   switch (type) {
     case 'ID_FOCUS':
@@ -6,6 +8,9 @@ const selection = (state = [], {type, payload}) => {
       return [ ...state, payload.id ]
     case 'ID_DESELECT':
       return state.filter(id => id !== payload.id)
+    case ENTITY_DELETE:
+    case ENTITY_DELETE_ALL:
+     return []
     default:
       return state
   }

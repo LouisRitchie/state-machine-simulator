@@ -35,7 +35,11 @@ class RectangularArea extends Component {
   _handleMouseDown = event => event.stopPropagation()
   _handleMouseUp = event => event.stopPropagation()
 
-  _delete = () => this.props.deleteEntity(this.props.id)
+  _delete = event => {
+    event.stopPropagation()
+    event.preventDefault()
+    this.props.deleteEntity(this.props.id)
+  }
 
   render() {
     const {
