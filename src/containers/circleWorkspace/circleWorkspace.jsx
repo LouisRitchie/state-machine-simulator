@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { last, mapObjIndexed, pick } from 'ramda'
+import { last, head, mapObjIndexed, pick } from 'ramda'
 import { interval } from 'rxjs/observable/interval'
 import { map, take, takeUntil, throttleTime, withLatestFrom } from 'rxjs/operators'
 import { Subject } from 'rxjs/Subject'
@@ -50,10 +50,10 @@ class Workspace extends Component {
     this._updateCurrentCoordsGhost$ = this._updateCurrentCoords$.pipe(throttleTime(250))
     this._updateCurrentCoordsGhost$.subscribe(({pageX, pageY}) => this.state.startCoords[0] !== -1 && this.setState({ currentCoordsGhost: [pageX, pageY] }))
 
-    this._shapeDrawn$ = this._mouseUp$.pipe(withLatestFrom(this._mouseDown$))
+    this._shapeDrawn$ = this._mouseUp$.pipe(withLatestFrom(this._updateCurrentCoords$))
     this._shapeDrawn$.subscribe(
       ([{pageX: x1, pageY: y1}, {pageX: x2, pageY: y2}]) => {
-        const { left: x, top: y, height, width } = this._snapToGrid([x1, y1], [x2, y2])
+        const { left: x, top: y, height, width } = this._snapToGrid([x2, y2])
 
         if (height !== 0 || width !== 0) {
           this.props.addEntity({x, y, height, width})
@@ -87,8 +87,7 @@ class Workspace extends Component {
 
         <div className='drawArea' onMouseDown={this._mouseDown} onMouseUp={this._mouseUp} onMouseMove={this._mouseMove}>
           { entities.map(({x, y, height, width, id}) => <CircularArea x={x} y={y} height={height} width={width} key={id} id={id} />) }
-          { startCoords[0] !== -1 && <div className='currentSelection' style={getTLHW(startCoords, currentCoords)} /> }
-          { startCoordsGhost[0] !== -1 && <div className='ghostSelection' style={mapObjIndexed(val => val * gridSize, this._snapToGrid(startCoordsGhost, currentCoordsGhost))} /> }
+          { startCoordsGhost[0] !== -1 && <div className='ghostSelection' style={mapObjIndexed(val => val * gridSize, this._snapToGrid(currentCoordsGhost))} /> }
         </div>
       </div>
     )

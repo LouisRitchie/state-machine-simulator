@@ -6,17 +6,23 @@
   border-radius: 50%;
 
   &.selected {
-    background: repeating-linear-gradient(112.5deg, #69f 0px, #69f 2px, white 2px, white 25px);
-    border-color: #69f;
+    background: repeating-linear-gradient(112.5deg, #05f 0px, #05f 2px, white 2px, white 15px);
+    border-color: #05f;
     animation: scrollBackground 1s infinite;
+  }
+
+  button {
+    position: absolute;
+    bottom: 32px;
+    right: 36px;
   }
 }
 
 @keyframes scrollBackground {
-  0% { background: repeating-linear-gradient(112.5deg, #69f 0px, #69f 1px, white 1px, white 25px); }
-  20% { background: repeating-linear-gradient(112.5deg, #69f 5px, #69f 6px, white 6px, white 30px); }
-  40% { background: repeating-linear-gradient(112.5deg, #69f 10px, #69f 11px, white 11px, white 35px); }
-  60% { background: repeating-linear-gradient(112.5deg, #69f 15px, #69f 16px, white 16px, white 40px); }
-  80% { background: repeating-linear-gradient(112.5deg, #69f 20px, #69f 21px, white 21px, white 45px); }
-  100% { background: repeating-linear-gradient(112.5deg, #69f 25px, #69f 26px, white 26px, white 50px); }
+  0% { background: repeating-linear-gradient(112.5deg, #05f 0px, #05f 1px, white 1px, white 15px); }
+  20% { background: repeating-linear-gradient(112.5deg, #05f 3px, #05f 4px, white 4px, white 18px); }
+  40% { background: repeating-linear-gradient(112.5deg, #05f 6px, #05f 7px, white 7px, white 21px); }
+  60% { background: repeating-linear-gradient(112.5deg, #05f 9px, #05f 10px, white 10px, white 24px); }
+  80% { background: repeating-linear-gradient(112.5deg, #05f 12px, #05f 13px, white 13px, white 27px); }
+  100% { background: repeating-linear-gradient(112.5deg, #05f 15px, #05f 16px, white 16px, white 30px); }
 }

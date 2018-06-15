@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { setGridSize } from 'actions/settings'
-import { deleteEntity, deleteAllEntities } from 'actions/entities'
+import { deleteAllEntities } from 'actions/entities'
 import { Subject } from 'rxjs/Subject'
 import { interval } from 'rxjs/observable/interval'
 import { distinctUntilChanged, map, pluck, take, takeUntil, withLatestFrom } from 'rxjs/operators'
@@ -40,9 +40,6 @@ class ControlPanel extends Component {
           <input onChange={this._handleRangeChange} defaultValue='20' type='range' />
         </div>
         <div className='controlItem'>
-          <button onClick={deleteEntity}>Delete Entity</button>
-        </div>
-        <div className='controlItem'>
           <button onClick={deleteAllEntities}>Delete All Entities</button>
         </div>
       </div>
@@ -50,4 +47,4 @@ class ControlPanel extends Component {
   }
 }
 
-export default connect(null, { setGridSize, deleteEntity, deleteAllEntities })(ControlPanel)
+export default connect(null, { setGridSize, deleteAllEntities })(ControlPanel)
