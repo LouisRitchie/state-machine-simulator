@@ -1,9 +1,9 @@
 // take x and y position of user-drawn rectangle, and pass them to a function curried with grid size, that returns x and y coordinates
-export const snapToGridFactory = gridSize => ([x1, y1], [x2, y2]) => ({
-  top: Math.round(Math.min(y1, y2) / gridSize),
-  left: Math.round(Math.min(x1, x2) / gridSize),
-  height: Math.floor(Math.abs(y2 - y1) / gridSize),
-  width: Math.floor(Math.abs(x2 - x1) / gridSize)
+export const snapToGridFactory = gridSize => ([x, y]) => ({
+  top: Math.round(y / gridSize),
+  left: Math.round(x / gridSize),
+  height: 3,
+  width: 3
 })
 
 export const getTLHW = (startCoords, currentCoords) => {

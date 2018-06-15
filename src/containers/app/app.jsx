@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import Header from 'components/header'
-import Workspace from 'containers/workspace'
+import CircleWorkspace from 'containers/circleWorkspace'
 import './styles.scss'
 
 class App extends Component {
@@ -10,7 +10,7 @@ class App extends Component {
       <div className="app">
         {/* <Header /> */}
         <Switch>
-          <Route exact path='/' component={Workspace} />
+          <Route exact path='/' component={CircleWorkspace} />
           <Redirect from='/*' to='/' />
         </Switch>
       </div>

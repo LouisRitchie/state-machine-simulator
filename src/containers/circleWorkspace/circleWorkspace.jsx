@@ -6,10 +6,12 @@ import { map, take, takeUntil, throttleTime, withLatestFrom } from 'rxjs/operato
 import { Subject } from 'rxjs/Subject'
 import { addEntity } from 'actions/entities'
 import BackgroundGrid from 'components/backgroundGrid'
-import RectangularArea from 'components/rectangularArea'
+import CircularArea from 'components/circularArea'
 import ControlPanel from 'components/controlPanel'
 import { getTLHW, snapToGridFactory } from './helpers'
 import './styles.scss'
+
+const SIZE_OF_CIRCLE = 3
 
 const initialState = {
   startCoords: [-1, -1],
@@ -84,7 +86,7 @@ class Workspace extends Component {
         <ControlPanel />
 
         <div className='drawArea' onMouseDown={this._mouseDown} onMouseUp={this._mouseUp} onMouseMove={this._mouseMove}>
-          { entities.map(({x, y, height, width, id}) => <RectangularArea x={x} y={y} height={height} width={width} key={id} id={id} />) }
+          { entities.map(({x, y, height, width, id}) => <CircularArea x={x} y={y} height={height} width={width} key={id} id={id} />) }
           { startCoords[0] !== -1 && <div className='currentSelection' style={getTLHW(startCoords, currentCoords)} /> }
           { startCoordsGhost[0] !== -1 && <div className='ghostSelection' style={mapObjIndexed(val => val * gridSize, this._snapToGrid(startCoordsGhost, currentCoordsGhost))} /> }
         </div>
