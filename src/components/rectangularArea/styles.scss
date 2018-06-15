@@ -1,8 +1,9 @@
 .rectangularArea {
   position: absolute;
-  border: 1px solid #999;
   box-sizing: border-box;
   background: white; 
+  border: 1px solid #999;
+  border-radius: 50%;
 
   &.selected {
     background: repeating-linear-gradient(112.5deg, #69f 0px, #69f 2px, white 2px, white 25px);
