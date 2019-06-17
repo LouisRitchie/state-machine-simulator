@@ -29,6 +29,10 @@ class Workspace extends Component {
     this._snapToGrid = snapToGridFactory(this.props.gridSize)
   }
 
+  componentWillUnmount() {
+    this._unmount.next()
+  }
+
   componentDidMount() {
     this._unmount$ = (new Subject()).pipe(take(1))
     this._mouseMove$ = (new Subject()).pipe(map(pick(['pageX', 'pageY'])), takeUntil(this._unmount$))
